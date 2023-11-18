@@ -7,7 +7,7 @@
 #
 name: OpenWrt-CI
 
-on: workflow_dispatch
+on:
   schedule:
     - cron: 0 20 * * *
 
