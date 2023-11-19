@@ -50,11 +50,16 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           
-      - name: Generate configuration file
+      - name: Delete configuration file
         run: |
           rm -rf ./tmp && rm -rf .config
-          make menuconfig
-          make V=s -j$(nproc) 
+          cd openwrt
+          
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          timeout-minutes: 15
 
       - name: Download packages
         run: make download -j16
