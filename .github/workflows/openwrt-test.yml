@@ -53,7 +53,6 @@ jobs:
       - name: Delete configuration file
         run: |
           rm -rf ./tmp && rm -rf .config
-          cd openwrt
           
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
