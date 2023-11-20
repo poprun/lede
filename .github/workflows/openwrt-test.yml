@@ -59,9 +59,9 @@ jobs:
       #    limit-access-to-actor: true
 
       - name: Download packages
-        run: |
-          #make V=s -j$(nproc)
-          make download -j16
+        run: make download -j16
+       #   make V=s -j$(nproc)
+           
           
       - name: Compile firmware
         run: |
@@ -79,7 +79,8 @@ jobs:
         run: |
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
-          cp -f $(find ~/work/lede/lede/.config) ./bin/targets/x64.config
+          mkdir -p ./artifact/config
+          cp -f $(find ~/work/lede/lede/.config) ./artifact/config/x64.config
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
@@ -88,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: x64.config
-          path: ./bin/targets/
+          path: ./artifact/config
 
       - name: Upload buildinfo
         uses: actions/upload-artifact@v3
