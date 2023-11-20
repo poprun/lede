@@ -64,12 +64,6 @@ jobs:
           make V=s -j$(nproc)
           make download -j16
           
-      - name: Upload firmware
-        uses: actions/upload-artifact@v3
-        with:
-          name: x64.config
-          path: ./bin/targets/
-          
       - name: Compile firmware
         run: |
           make -j$(nproc) || make -j1 V=s
@@ -86,9 +80,16 @@ jobs:
         run: |
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
+          cp .config x64.config
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
+     
+      - name: Upload x64.config
+        uses: actions/upload-artifact@v3
+        with:
+          name: x64.config
+          path: ./bin/targets/
 
       - name: Upload buildinfo
         uses: actions/upload-artifact@v3
