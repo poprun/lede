@@ -63,7 +63,13 @@ jobs:
         run: |
           make V=s -j$(nproc)
           make download -j16
-
+          
+      - name: Upload firmware
+        uses: actions/upload-artifact@v3
+        with:
+          name: x64.config
+          path: ./bin/targets/
+          
       - name: Compile firmware
         run: |
           make -j$(nproc) || make -j1 V=s
