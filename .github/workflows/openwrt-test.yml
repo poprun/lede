@@ -50,17 +50,25 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           
-      - name: Generate configuration file
-        run: make defconfig
-          
+      - name: Delete default configuration file
+        run: rm -rf ./tmp && rm -rf .config
+
+      - name: Checkout x64.config
+        uses: actions/checkout@v3
+        
+      - name: Copying x64.config from repositories
+        run: cp ./x64.config ~/work/lede/lede/.config
+        
       #- name: Setup tmate session
       #  uses: mxschmitt/action-tmate@v3.17
       #  with:
       #    limit-access-to-actor: true
 
       - name: Download packages
-        run: make download -j16
-       #   make V=s -j$(nproc)
+        run: |
+          make V=s -j$(nproc)
+          make download -j16
+          
            
           
       - name: Compile firmware
