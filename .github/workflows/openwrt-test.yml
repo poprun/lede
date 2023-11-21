@@ -87,15 +87,15 @@ jobs:
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
           mkdir -p ./artifact/config
-          cp -f $(find ~/work/lede/lede/.config) ./artifact/config/x64.config
+          cp -f $(find ~/work/lede/lede/defconfig) ./artifact/config/defconfig
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
      
-      - name: Upload x64.config
+      - name: Upload configuration
         uses: actions/upload-artifact@v3
         with:
-          name: x64.config
+          name: x64_defconfig
           path: ./artifact/config
 
       - name: Upload buildinfo
