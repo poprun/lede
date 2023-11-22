@@ -63,10 +63,11 @@ jobs:
         with:
           limit-access-to-actor: true
 
+      - name: Buliding
+        run: make V=s -j$(nproc)
+        
       - name: Download packages
-        run: |
-          make V=s -j$(nproc)
-          make download -j16
+        run: make download -j16
                
       - name: Compile firmware
         run: |
