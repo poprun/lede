@@ -53,21 +53,20 @@ jobs:
       - name: Delete default configuration file
         run: rm -rf ./tmp && rm -rf .config
 
-      - name: Checkout x64.config
-        uses: actions/checkout@v3
+      #- name: Checkout x64.config
+      #  uses: actions/checkout@v3
         
-      - name: Copying x64.config from repositories
-        run: cp ./x64.config ~/work/lede/lede/.config
+      #- name: Copying x64.config from repositories
+      #  run: cp ./x64.config ~/work/lede/lede/.config
         
-      #- name: Setup tmate session
-      #  uses: mxschmitt/action-tmate@v3.17
-      #  with:
-      #    limit-access-to-actor: true
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3.17
+        with:
+          limit-access-to-actor: true
 
       - name: Download packages
         run: |
-          make savedefconfig
-          make defconfig
+          make V=s -j$(nproc)
           make download -j16
                
       - name: Compile firmware
@@ -87,7 +86,7 @@ jobs:
           mkdir -p ./artifact/package
           mkdir -p ./artifact/buildinfo
           mkdir -p ./artifact/config
-          cp -f $(find ~/work/lede/lede/defconfig) ./artifact/config/defconfig
+          cp -f $(find ~/work/lede/lede/.config) ./artifact/config/x64.config
           rm -rf $(find ./bin/targets/ -type d -name "packages")
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./artifact/package/
           cp -rf $(find ./bin/targets/ -type f -name "*.buildinfo" -o -name "*.manifest") ./artifact/buildinfo/
@@ -95,7 +94,7 @@ jobs:
       - name: Upload configuration
         uses: actions/upload-artifact@v3
         with:
-          name: x64_defconfig
+          name: x64.config
           path: ./artifact/config
 
       - name: Upload buildinfo
